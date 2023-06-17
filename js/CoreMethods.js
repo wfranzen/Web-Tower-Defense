@@ -87,19 +87,48 @@ function isValidTowerPlacement(xx, yy) {
     if(nodeMatrix[xx][yy].wall === true) {return false;}
     if(nodeMatrix[xx][yy].spawn === true) {return false;}
 
-    // Prevent building tower on path.
+    // Prevent building tower on path - checks if placement of wall at (xx,yy) allows for possible path
     nodeMatrix[xx][yy].wall = true;
-    validPath = astar(enemySpawnNode, enemyGoalNode);
-    isValidPath = validPath.length > 0;
+    validCheckpointPath = astar(enemySpawnNode, enemyCheckpointNode);
+    validGoalPath = astar(enemyCheckpointNode, enemyGoalNode);
+    isValidPath = validCheckpointPath.length > 0 && validGoalPath.length > 0;
     nodeMatrix[xx][yy].wall = false;
+
+
     if(!isValidPath) {
-        validPath = astar(enemySpawnNode, enemyGoalNode);
+        validCheckpointPath = astar(enemySpawnNode, enemyCheckpointNode);
+        validGoalPath = astar(enemyCheckpointNode, enemyGoalNode);
         return false;
     }
 
     // Allow placement of tower.
     return true;
 }
+
+// // Check to see if the placement of a building does not make the path impossible.
+// function isValidGoalTowerPlacement(xx, yy) {
+
+//     // Prevent building tower on walls and spawn.
+//     if(nodeMatrix[xx][yy].wall === true) {return false;}
+//     if(nodeMatrix[xx][yy].spawn === true) {return false;}
+
+//     // Prevent building tower on path - checks if placement of wall at (xx,yy) allows for possible path
+//     nodeMatrix[xx][yy].wall = true;
+//     validCheckpointPath = astar(enemySpawnNode, enemyCheckpointNode);
+//     // validGoalPath = astar(enemyCheckpointNode, enemyGoalNode);
+//     isValidPath = validCheckpointPath.length > 0;
+//     nodeMatrix[xx][yy].wall = false;
+
+
+//     if(!isValidPath) {
+//         validCheckpointPath = astar(enemySpawnNode, enemyCheckpointNode);
+//         // validGoalPath = astar(enemyCheckpointNode, enemySpawnNode);
+//         return false;
+//     }
+
+//     // Allow placement of tower.
+//     return true;
+// }
 
 
 function spawnTower(xx, yy) {

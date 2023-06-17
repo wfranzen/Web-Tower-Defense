@@ -92,12 +92,15 @@ function heuristic(nodeA, nodeB) {
 // Function to reconstruct the path from the goal node to the start node
 function reconstructPath(currentNode) {
     let path = [];
-
+    let visited = new Set(); // Keep track of visited nodes
+  
     while (currentNode != null) {
-        // console.log(currentNode.row, currentNode.col);
-        path.push(currentNode);
-        currentNode = currentNode.previous;
+      if (visited.has(currentNode)) {break;}
+  
+      visited.add(currentNode);
+      path.push(currentNode);
+      currentNode = currentNode.previous;
     }
-    enemySpawnNode.previous = null;  // Fixes crashses occuring when a tower was built while enemy at neighbors of spawn nodes. Not sure why, but fixes infinite loop.
+    
     return path.reverse();
-}
+  }

@@ -17,6 +17,7 @@ class Enemy {
         }
         this.remainingWaypoints = null;
         this.nextWaypoint = null;
+        this.currentGoal = enemyCheckpointNode;
     }
 
     // Draws the enemy.
@@ -64,8 +65,13 @@ class Enemy {
         ) {
             this.remainingWaypoints.shift();
             this.nextWaypoint = this.remainingWaypoints[0];
-            if(!this.nextWaypoint) {
-                this.health = 0;
+            
+            if(this.position.x == 328 && this.position.y == 328) {
+                this.currentGoal = enemyGoalNode;
+                updateEnemyPath();
+                
+            } else if(!this.nextWaypoint) {
+                console.log('End of path reached.');
             }
         }
     }

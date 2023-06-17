@@ -23,15 +23,17 @@ image.src = 'img/soloLane.png';
 
 // Spawn enemies.
 const enemies = [];
+var wave = 1;
 function spawnEnemies(spawnCount) {
     for (let i = 0; i < spawnCount; i++) {
 
         var newEnemy = new Enemy({location: {x: enemySpawnNode.x, y: enemySpawnNode.y}});
-        const enemyPath = [...validPath];
+        const enemyPath = [...validCheckpointPath];
+        newEnemy.health += wave * 50;  // Basic increasing difficulty mechanic
         newEnemy.setPath(enemyPath);
         enemies.push(newEnemy);
-        
     }
+    wave++;
 }
 
 
@@ -93,7 +95,7 @@ function animate() {
     });
 
 
-    drawPathLine(validPath, makeColorRGBA(255,0,0,0.5), c);
+    drawPathLine(validCheckpointPath, makeColorRGBA(255,0,0,0.5), c);
 
     if (mouseNode) {
         drawPoints([mouseNode], canPlaceTowerAtMouse ? makeColorRGBA(0,125,255,0.5) : makeColorRGBA(255,100,0,0.5), c);
@@ -121,7 +123,7 @@ function updateEnemyPath() {
         enemyCurrentNode.previous = null;
         
         // Calculate the path without modifying the original validPath array
-        const enemyPath = astar(enemyCurrentNode, enemyGoalNode); // Compute the new path using the astar function (or your chosen pathfinding algorithm)
+        const enemyPath = astar(enemyCurrentNode, enemy.currentGoal); // Compute the new path using the astar function (or your chosen pathfinding algorithm)
         enemy.setPath(enemyPath); // Set the new path for the enemy
         
     });
@@ -155,15 +157,16 @@ const validTilesMatrix = arrayToMatrix(placementTilesData, 41);
 const nodeMatrix = buildNodeMatrix(validTilesMatrix);
 linkNeighbors(nodeMatrix);
 
-const enemySpawnNode = nodeMatrix[20][0]; // [Column][Row] ... [Y][X]
-const enemyGoalNode = nodeMatrix[20][37]; // [Column][Row] ... [Y][X]
-var validPath = astar(enemySpawnNode, enemyGoalNode);
+const enemySpawnNode = nodeMatrix[20][0];  // Enemy spawn
+const enemyCheckpointNode = nodeMatrix[20][20];  // Enemy checkpoint
+const enemyGoalNode = nodeMatrix[20][40];  // Enemy goal
+
+var validCheckpointPath = astar(enemySpawnNode, enemyCheckpointNode);
+var validGoalPath = astar(enemyCheckpointNode, enemyGoalNode);
 
 const buildings = [];
 let enemyCount = 1;
 spawnEnemies(enemyCount);
-// console.log(enemies[0].nextWaypoint);
-
 
 setInterval(function(){
     animate();
