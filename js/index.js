@@ -83,7 +83,7 @@ function animate() {
 
                 // Tracking total number of enemies.
                 if (enemies.length === 0) {
-                    enemyCount += 1;
+                    enemyCount = 1;
                     spawnEnemies(enemyCount);
                 }
 
@@ -118,13 +118,10 @@ function updateEnemyPath() {
         const enemyCurrentNodeX = Math.floor(enemy.position.x / TILESIZE - 0.5);
         const enemyCurrentNodeY = Math.floor(enemy.position.y / TILESIZE - 0.5);
         const enemyCurrentNode = nodeMatrix[enemyCurrentNodeX][enemyCurrentNodeY];
-        console.log(enemyCurrentNode);
         enemyCurrentNode.previous = null;
         
-
         // Calculate the path without modifying the original validPath array
         const enemyPath = astar(enemyCurrentNode, enemyGoalNode); // Compute the new path using the astar function (or your chosen pathfinding algorithm)
-        //console.log(enemyPath);
         enemy.setPath(enemyPath); // Set the new path for the enemy
         
     });
@@ -158,13 +155,14 @@ const validTilesMatrix = arrayToMatrix(placementTilesData, 41);
 const nodeMatrix = buildNodeMatrix(validTilesMatrix);
 linkNeighbors(nodeMatrix);
 
-const enemySpawnNode = nodeMatrix[20][3];
-const enemyGoalNode = nodeMatrix[20][37];
+const enemySpawnNode = nodeMatrix[20][0]; // [Column][Row] ... [Y][X]
+const enemyGoalNode = nodeMatrix[20][37]; // [Column][Row] ... [Y][X]
 var validPath = astar(enemySpawnNode, enemyGoalNode);
 
 const buildings = [];
 let enemyCount = 1;
 spawnEnemies(enemyCount);
+// console.log(enemies[0].nextWaypoint);
 
 
 setInterval(function(){

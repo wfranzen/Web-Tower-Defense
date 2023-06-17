@@ -10,7 +10,7 @@ class Enemy {
             y: (0.5 + this.location.y) * TILESIZE
         }
         this.radius = 12;
-        this.health = 100;
+        this.health = 1000;
         this.velocity = {
             x: 0,
             y: 0
@@ -65,7 +65,7 @@ class Enemy {
             this.remainingWaypoints.shift();
             this.nextWaypoint = this.remainingWaypoints[0];
             if(!this.nextWaypoint) {
-                console.log('Enemy reached the end of the path!');
+                this.health = 0;
             }
         }
     }

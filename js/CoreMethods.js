@@ -8,10 +8,17 @@ function arrayToMatrix(gridArray, columns) {
     return rotatedMatrix;
 }
 
-
 function isWall(symbol) {
 
     if (symbol === 0) {
+        return true;
+    }
+    return false;
+}
+
+function isSpawn(symbol) {
+
+    if (symbol === 1) {
         return true;
     }
     return false;
@@ -27,6 +34,7 @@ function buildNodeMatrix(gridMatrix) {
             
             var node = new Node(x, y);
             node.wall = isWall(gridMatrix[x][y]);
+            node.spawn = isSpawn(gridMatrix[x][y]);
             nodeRow.push(node);
         }
         nodeMatrix.push(nodeRow);
@@ -75,8 +83,9 @@ function linkNeighbors(nodeMatrix) {
 // Check to see if the placement of a building does not make the path impossible.
 function isValidTowerPlacement(xx, yy) {
 
-    // Prevent building tower on walls. 
+    // Prevent building tower on walls and spawn.
     if(nodeMatrix[xx][yy].wall === true) {return false;}
+    if(nodeMatrix[xx][yy].spawn === true) {return false;}
 
     // Prevent building tower on path.
     nodeMatrix[xx][yy].wall = true;
@@ -109,7 +118,7 @@ function spawnTower(xx, yy) {
     );
     
     nodeMatrix[xx][yy].wall = true;
-    validPath = astar(enemySpawnNode, enemyGoalNode);
+    // validPath = astar(enemySpawnNode, enemyGoalNode);  // Recalculated higher up
 
     // Place the tower on the grid.
     return true;
@@ -132,7 +141,6 @@ function drawPathLine(pointsArray, color, context) {
 
     context.strokeStyle = color || 'blue';
     context.lineWidth = 1;
-    context.beginPath();
     context.moveTo(pointsArray[0].x * TILESIZE + TILESIZE / 2, pointsArray[0].y * TILESIZE + TILESIZE / 2);
 
     for(let i = 0; i < pointsArray.length; i++) {

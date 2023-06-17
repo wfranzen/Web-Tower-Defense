@@ -9,7 +9,7 @@ class Node {
       this.neighbors = []; // Array to store neighboring nodes
       this.previous = null; // Reference to the previous node in the optimal path
       this.wall = false; // Flag indicating if this node is a wall or obstacle
-    //   this.built = false; // Flag indicating if this node is a building
+      this.spawn = false;
       this.x = col;
       this.y = row;
     }
@@ -23,7 +23,6 @@ function astar(start, end) {
     let open = [];
     let closed = [];
 
-    if(start.wall) return open;
     if(start === end) return open;
 
     // Add the start node to the open list
@@ -93,10 +92,12 @@ function heuristic(nodeA, nodeB) {
 // Function to reconstruct the path from the goal node to the start node
 function reconstructPath(currentNode) {
     let path = [];
+
     while (currentNode != null) {
-        console.log(currentNode.row, currentNode.col);
+        // console.log(currentNode.row, currentNode.col);
         path.push(currentNode);
         currentNode = currentNode.previous;
     }
+    enemySpawnNode.previous = null;  // Fixes crashses occuring when a tower was built while enemy at neighbors of spawn nodes. Not sure why, but fixes infinite loop.
     return path.reverse();
 }
