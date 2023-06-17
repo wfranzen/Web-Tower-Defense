@@ -21,21 +21,48 @@ const image = new Image();
 image.src = 'img/soloLane.png';
 
 
-// Spawn enemies.
-const enemies = [];
-var wave = 1;
-function spawnEnemies(spawnCount) {
-    for (let i = 0; i < spawnCount; i++) {
 
-        var newEnemy = new Enemy({location: {x: enemySpawnNode.x, y: enemySpawnNode.y}});
+// ============== Enemy Spawning ============== //
+
+// Enemy spawning variables.
+const enemies = [];
+let wave = 1;
+let spawnIndex = 0;
+let spawnInterval = null;
+
+// Enemy spawning functions.
+function spawnEnemy() {
+
+    if (spawnIndex < wave * 2) {
+        const newEnemy = new Enemy({
+            location: { x: enemySpawnNode.x, y: enemySpawnNode.y }
+        });
         const enemyPath = [...validCheckpointPath];
-        newEnemy.health += wave * 50;  // Basic increasing difficulty mechanic
+        newEnemy.health += wave * 50; // Temporary difficulty mechanic
         newEnemy.setPath(enemyPath);
         enemies.push(newEnemy);
+        spawnIndex++;
+    } else {
+        clearInterval(spawnInterval); // Stop spawning enemies at the end of the wave
     }
-    wave++;
+  }
+  
+function startWave() {
+    spawnIndex = 0;
+    spawnInterval = setInterval(spawnEnemy, SPAWN_INTERVAL_MS);
+
+    // After spawning all enemies in the wave, start the next wave after a delay
+    setTimeout(() => {
+        clearInterval(spawnInterval);
+        wave++;
+        startWave();
+        console.log(`Wave ${wave} started!`);
+    }, SPAWN_INTERVAL_MS * wave + WAVE_INTERVAL_MS);
 }
 
+
+
+// ============== Building Placement ============== //
 
 // Function to animate the canvas.
 function animate() {
@@ -83,17 +110,10 @@ function animate() {
                     if (enemyIndex > -1) enemies.splice(enemyIndex, 1);
                 }
 
-                // Tracking total number of enemies.
-                if (enemies.length === 0) {
-                    enemyCount = 1;
-                    spawnEnemies(enemyCount);
-                }
-
                 building.projectiles.splice(i, 1);
             }
         }
     });
-
 
     drawPathLine(validCheckpointPath, makeColorRGBA(255,0,0,0.5), c);
 
@@ -101,6 +121,10 @@ function animate() {
         drawPoints([mouseNode], canPlaceTowerAtMouse ? makeColorRGBA(0,125,255,0.5) : makeColorRGBA(255,100,0,0.5), c);
     }
 }
+
+
+
+// ============== Mouse Functionality ============== //
 
 canvas.addEventListener('click', (event) => {
     
@@ -112,24 +136,6 @@ canvas.addEventListener('click', (event) => {
     updateEnemyPath();
 
 });
-
-function updateEnemyPath() {
-
-    enemies.forEach(enemy => {
-        
-        const enemyCurrentNodeX = Math.floor(enemy.position.x / TILESIZE - 0.5);
-        const enemyCurrentNodeY = Math.floor(enemy.position.y / TILESIZE - 0.5);
-        const enemyCurrentNode = nodeMatrix[enemyCurrentNodeX][enemyCurrentNodeY];
-        enemyCurrentNode.previous = null;
-        
-        // Calculate the path without modifying the original validPath array
-        const enemyPath = astar(enemyCurrentNode, enemy.currentGoal); // Compute the new path using the astar function (or your chosen pathfinding algorithm)
-        enemy.setPath(enemyPath); // Set the new path for the enemy
-        
-    });
-
-}
-
 
 // Get the mouse position.
 var canPlaceTowerAtMouse = false;
@@ -151,7 +157,25 @@ window.addEventListener('mousemove', (event) => {
     
 });
 
+// Enemy path updating after building placement.
+function updateEnemyPath() {
 
+    enemies.forEach(enemy => {
+        
+        const enemyCurrentNodeX = Math.floor(enemy.position.x / TILESIZE - 0.5);
+        const enemyCurrentNodeY = Math.floor(enemy.position.y / TILESIZE - 0.5);
+        const enemyCurrentNode = nodeMatrix[enemyCurrentNodeX][enemyCurrentNodeY];
+        enemyCurrentNode.previous = null;
+        
+        // Calculate the path without modifying the original validPath array
+        const enemyPath = astar(enemyCurrentNode, enemy.currentGoal); // Compute the new path using the astar function (or your chosen pathfinding algorithm)
+        enemy.setPath(enemyPath); // Set the new path for the enemy
+        
+    });
+
+}
+
+// ============== Game Initialization ============== //
 const validTilesMatrix = arrayToMatrix(placementTilesData, 41);
 
 const nodeMatrix = buildNodeMatrix(validTilesMatrix);
@@ -165,8 +189,8 @@ var validCheckpointPath = astar(enemySpawnNode, enemyCheckpointNode);
 var validGoalPath = astar(enemyCheckpointNode, enemyGoalNode);
 
 const buildings = [];
-let enemyCount = 1;
-spawnEnemies(enemyCount);
+
+startWave();
 
 setInterval(function(){
     animate();
