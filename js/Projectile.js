@@ -22,8 +22,8 @@ class Projectile {
         this.draw();
 
         const angle = Math.atan2(
-            this.enemy.center.y - this.position.y,
-            this.enemy.center.x - this.position.x
+            this.enemy.position.y - this.position.y,
+            this.enemy.position.x - this.position.x
         );
 
         const power = 2;  // Speed of the projectile.

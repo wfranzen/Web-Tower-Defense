@@ -17,11 +17,14 @@ class Node {
 
 // A* algorithm implementation
 function astar(start, end) {
+
+    //console.log(start, end);
 // Create open and closed lists
     let open = [];
     let closed = [];
 
     if(start.wall) return open;
+    if(start === end) return open;
 
     // Add the start node to the open list
     open.push(start);
@@ -70,25 +73,28 @@ function astar(start, end) {
 
                 if (!inOpenList) {
                 // Add the neighbor to the open list
-                open.push(neighbor);
+                    open.push(neighbor);
                 }
             }
         }
     }
 
+    console.log('no path');
     // No path found
     return [];
 }
 
 // Heuristic function (Manhattan distance)
 function heuristic(nodeA, nodeB) {
+    
     return Math.abs(nodeA.row - nodeB.row) + Math.abs(nodeA.col - nodeB.col);
 }
 
 // Function to reconstruct the path from the goal node to the start node
 function reconstructPath(currentNode) {
     let path = [];
-    while (currentNode) {
+    while (currentNode != null) {
+        console.log(currentNode.row, currentNode.col);
         path.push(currentNode);
         currentNode = currentNode.previous;
     }

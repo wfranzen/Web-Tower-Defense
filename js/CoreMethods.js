@@ -80,11 +80,11 @@ function isValidTowerPlacement(xx, yy) {
 
     // Prevent building tower on path.
     nodeMatrix[xx][yy].wall = true;
-    validPath = astar(enemySpawnNode, enemyGoalNode, nodeMatrix);
+    validPath = astar(enemySpawnNode, enemyGoalNode);
     isValidPath = validPath.length > 0;
     nodeMatrix[xx][yy].wall = false;
     if(!isValidPath) {
-        validPath = astar(enemySpawnNode, enemyGoalNode, nodeMatrix);
+        validPath = astar(enemySpawnNode, enemyGoalNode);
         return false;
     }
 
@@ -109,7 +109,10 @@ function spawnTower(xx, yy) {
     );
     
     nodeMatrix[xx][yy].wall = true;
-    validPath = astar(enemySpawnNode, enemyGoalNode, nodeMatrix);
+    validPath = astar(enemySpawnNode, enemyGoalNode);
+
+    // Place the tower on the grid.
+    return true;
 }
 
 
@@ -124,6 +127,8 @@ function drawPoints(pointsArray, color, context) {
 
 
 function drawPathLine(pointsArray, color, context) {
+
+    if(!pointsArray || pointsArray.length === 0) {return;}
 
     context.strokeStyle = color || 'blue';
     context.lineWidth = 1;
