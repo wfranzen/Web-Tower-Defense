@@ -205,3 +205,13 @@ function makeColorRGBA(rr,gg,bb,aa) {
 }
 
 
+function displayWaveNumber(waveNumber) {
+    const waveNumberElement = document.getElementById('waveNumberElement');
+    waveNumberElement.textContent = 'Wave ' + waveNumber;
+    waveNumberElement.style.opacity = '1'; // Set initial opacity to fully visible
+
+    // Fade out the wave number element after 3 seconds
+    setTimeout(function () {
+        waveNumberElement.style.opacity = '0'; // Set opacity to fade out gradually
+    }, 3000); // Adjust the duration as needed
+}

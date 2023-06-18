@@ -1,10 +1,48 @@
+<html>
+<head>
+<title>Your Tower Defense Game</title>
+ 
  <style>
-    body {
-        background-color: black;
+
+body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh; /* Set the height of the container to the viewport height */
+      margin: 0;
+      padding: 0;
+      background-color: black;
+    }
+    
+    /* Position the canvas element as the background */
+    canvas {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 0;
+    }
+    
+    /* Style the container for the HTML content */
+    .html-content {
+      text-align: center;
+    }
+
+    #waveNumberElement {
+      position: absolute;
+      font-size: 48px;
+      color: orangered;
+      opacity: 0; /* Initially hidden */
+      transition: opacity 1.5s ease-in-out; /* Add a transition effect for fade-in and fade-out */
+      z-index: 1;
+      pointer-events: none;
     }
 </style>
+</head>
+<body>
+    <canvas></canvas>
+    <div id="waveNumberElement"></div>
 
-<canvas></canvas>
 
 <script src="js/Kanvas.js"></script>
 <script src="js/Constants.js"></script>
@@ -16,3 +54,6 @@
 <script src="js/CoreMethods.js"></script>
 <script src="js/index.js"></script>
 
+
+</body>
+</html>

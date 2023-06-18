@@ -57,6 +57,7 @@ function startWave() {
         wave++;
         startWave();
         console.log(`Wave ${wave} started!`);
+        displayWaveNumber(wave);
     }, SPAWN_INTERVAL_MS * wave + WAVE_INTERVAL_MS);
 }
 
