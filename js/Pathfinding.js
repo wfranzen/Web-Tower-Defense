@@ -18,8 +18,7 @@ class Node {
 // A* algorithm implementation
 function astar(start, end) {
 
-    //console.log(start, end);
-// Create open and closed lists
+    // Create open and closed lists
     let open = [];
     let closed = [];
 
@@ -78,7 +77,6 @@ function astar(start, end) {
         }
     }
 
-    console.log('no path');
     // No path found
     return [];
 }

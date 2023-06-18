@@ -10,7 +10,7 @@ class Enemy {
             y: (0.5 + this.location.y) * TILESIZE
         }
         this.radius = 12;
-        this.health = 1000;
+        this.health = 100;
         this.velocity = {
             x: 0,
             y: 0
@@ -28,11 +28,13 @@ class Enemy {
         c.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2);
         c.fill();
 
-        // Draw the enemy's health bar.
-        c.fillStyle = 'red';
-        c.fillRect(this.position.x - this.radius, this.position.y - this.radius * 1.5, this.radius * 2, 4);
-        c.fillStyle = 'green';
-        c.fillRect(this.position.x - this.radius, this.position.y - this.radius * 1.5, this.radius * 2 * (this.health / 100), 4);
+
+        // ====== Temporarily disabled ======
+        // Draw the enemy's health bar.   
+        // c.fillStyle = 'red';
+        // c.fillRect(this.position.x - this.radius, this.position.y - this.radius * 1.5, 15, 4);
+        // c.fillStyle = 'green';
+        // c.fillRect(this.position.x - this.radius, this.position.y - this.radius * 1.5, 15 * (this.health / 100), 4);
     }
 
     
@@ -72,6 +74,7 @@ class Enemy {
                 
             } else if(!this.nextWaypoint) {
                 console.log('End of path reached.');
+                this.health = 0;
             }
         }
     }
