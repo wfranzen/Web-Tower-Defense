@@ -215,3 +215,24 @@ function displayWaveNumber(waveNumber) {
         waveNumberElement.style.opacity = '0'; // Set opacity to fade out gradually
     }, 3000); // Adjust the duration as needed
 }
+
+
+
+// Stop spawning enemies when player_health reaches 0.
+function gameOver() {
+    clearInterval(spawnInterval); // Stop spawning enemies
+    drawGameOverMessage(); // Display the game over message on the screen
+    // cancelAnimationFrame(animationFrame); // Stop the animation loop
+
+    clearInterval(spawnInterval);
+    c.removeEventListener('click', isValidTowerPlacement);
+  }
+
+
+function drawGameOverMessage() {
+    const canvas = document.getElementById('canvas');
+    c.font = '32px Arial';
+    c.fillStyle = 'red';
+    c.textAlign = 'center';
+    c.fillText('Game Over', c.width / 2, c.height / 2);
+}

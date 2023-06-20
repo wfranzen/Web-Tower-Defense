@@ -20,6 +20,8 @@ var mouseGridY = 0;
 const image = new Image();
 image.src = 'img/soloLane.png';
 
+var player_health = 1;
+
 
 
 // ============== Enemy Spawning ============== //
@@ -114,12 +116,18 @@ function animate() {
                 building.projectiles.splice(i, 1);
             }
         }
+
+        
     });
 
     drawPathLine(validCheckpointPath, makeColorRGBA(255,0,0,0.5), c);
 
     if (mouseNode) {
         drawPoints([mouseNode], canPlaceTowerAtMouse ? makeColorRGBA(0,125,255,0.5) : makeColorRGBA(255,100,0,0.5), c);
+    }
+
+    if(player_health === 0) {
+        console.log('Game Over!');
     }
 }
 
@@ -196,3 +204,5 @@ startWave();
 setInterval(function(){
     animate();
 }, 1000/120);
+
+
