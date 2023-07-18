@@ -37,11 +37,22 @@ body {
       z-index: 1;
       pointer-events: none;
     }
+
+    #gameOverElement {
+      position: absolute;
+      font-size: 80px;
+      color: orangered;
+      opacity: 0; /* Initially hidden */
+      transition: opacity 1.5s ease-in-out; /* Add a transition effect for fade-in and fade-out */
+      z-index: 1;
+      pointer-events: none;
+    }
 </style>
 </head>
 <body>
     <canvas></canvas>
     <div id="waveNumberElement"></div>
+    <div id="gameOverElement"></div>
 
 
 <script src="js/Kanvas.js"></script>

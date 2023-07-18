@@ -43,7 +43,7 @@ function buildNodeMatrix(gridMatrix) {
 }
 
 function rotateMatrix(matrix) {
-//    return matrix[0].map((val, index) => matrix.map(row => row[index]).reverse());
+
     // Switch the rows and columns.
     const rotatedMatrix = [];
     for (let col = 0; col < matrix[0].length; col++) {
@@ -163,7 +163,6 @@ function drawPoints(pointsArray, color, context) {
     }
 }
 
-
 function drawPathLine(pointsArray, color, context) {
 
     if(!pointsArray || pointsArray.length === 0) {return;}
@@ -221,18 +220,36 @@ function displayWaveNumber(waveNumber) {
 // Stop spawning enemies when player_health reaches 0.
 function gameOver() {
     clearInterval(spawnInterval); // Stop spawning enemies
-    drawGameOverMessage(); // Display the game over message on the screen
-    // cancelAnimationFrame(animationFrame); // Stop the animation loop
+    drawGameOverMessage(); // Display the game over message
+    //cancelAnimationFrame(animationFrame); // Stop the animation loop
 
-    clearInterval(spawnInterval);
-    c.removeEventListener('click', isValidTowerPlacement);
+    spawnInterval = null;
+    gameOverCheck = true;
+
+    canvas.removeEventListener('click', isValidTowerPlacement);
   }
 
 
 function drawGameOverMessage() {
-    const canvas = document.getElementById('canvas');
-    c.font = '32px Arial';
-    c.fillStyle = 'red';
-    c.textAlign = 'center';
-    c.fillText('Game Over', c.width / 2, c.height / 2);
+    const gameOverElement = document.getElementById('gameOverElement');
+    gameOverElement.textContent = 'Game Over!';
+    gameOverElement.style.opacity = '1'; // Set initial opacity to fully visible
 }
+
+function renderPlayerHealthBar() {
+    const healthBarWidth = 200;
+    const healthBarHeight = 20;
+    const healthBarX = 10;
+    const healthBarY = 10;
+  
+    // Calculate the current health bar width based on the player's health percentage
+    const currentHealthWidth = (player_health / player_health_max) * healthBarWidth;
+  
+    // Draw the background health bar
+    c.fillStyle = 'gray';
+    c.fillRect(healthBarX, healthBarY, healthBarWidth, healthBarHeight);
+  
+    // Draw the current health bar
+    c.fillStyle = 'green';
+    c.fillRect(healthBarX, healthBarY, currentHealthWidth, healthBarHeight);
+  }

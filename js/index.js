@@ -20,7 +20,9 @@ var mouseGridY = 0;
 const image = new Image();
 image.src = 'img/soloLane.png';
 
-var player_health = 1;
+const player_health_max = 100;
+var player_health = 100;
+var gameOverCheck = false;
 
 
 
@@ -55,6 +57,9 @@ function startWave() {
 
     // After spawning all enemies in the wave, start the next wave after a delay
     setTimeout(() => {
+
+        if(gameOverCheck) return;
+
         clearInterval(spawnInterval);
         wave++;
         startWave();
@@ -71,6 +76,7 @@ function startWave() {
 function animate() {
 
     c.drawImage(image, 0, 0);
+    renderPlayerHealthBar();
     
     for(let i = enemies.length - 1; i >= 0; i--) {
         const enemy = enemies[i];
@@ -128,6 +134,8 @@ function animate() {
 
     if(player_health === 0) {
         console.log('Game Over!');
+        drawGameOverMessage();
+        gameOver();
     }
 }
 

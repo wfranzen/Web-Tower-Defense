@@ -74,11 +74,7 @@ class Enemy {
                 
             } else if(!this.nextWaypoint) {
                 console.log('End of path reached.');
-                player_health--;
-                
-                if(player_health === 0) {
-                    gameOver();
-                }
+                player_health -= 50;
             }
         }
     }
