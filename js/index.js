@@ -23,6 +23,7 @@ image.src = 'img/soloLane.png';
 const player_health_max = 100;
 var player_health = 100;
 var gameOverCheck = false;
+let playerCurrency = 500;
 
 
 
@@ -70,13 +71,15 @@ function startWave() {
 
 
 
-// ============== Building Placement ============== //
+// ============== Building Placement & Game Animation ============== //
 
 // Function to animate the canvas.
 function animate() {
 
+    // Draw the canvas, health bar, and currency.
     c.drawImage(image, 0, 0);
     renderPlayerHealthBar();
+    renderPlayerCurrency();
     
     for(let i = enemies.length - 1; i >= 0; i--) {
         const enemy = enemies[i];
@@ -116,6 +119,8 @@ function animate() {
                         return enemy === projectile.enemy;
                     });
 
+                    playerCurrency += 10;  // Gain 10 currency for killing enemies.
+
                     if (enemyIndex > -1) enemies.splice(enemyIndex, 1);
                 }
 
@@ -151,6 +156,9 @@ canvas.addEventListener('click', (event) => {
 
     // If a tower is spawned, update path for each enemy using their current position.
     updateEnemyPath();
+
+    // If a tower is spawned, reduce player currency by 50.
+    playerCurrency -= 50;
 
 });
 

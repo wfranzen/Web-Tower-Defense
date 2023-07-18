@@ -137,6 +137,10 @@ function spawnTower(xx, yy) {
         return false;
     }
 
+    if (playerCurrency < 50) {
+        return false;
+    }
+
     buildings.push(
         new Building({
             location: {
@@ -252,4 +256,10 @@ function renderPlayerHealthBar() {
     // Draw the current health bar
     c.fillStyle = 'green';
     c.fillRect(healthBarX, healthBarY, currentHealthWidth, healthBarHeight);
+  }
+
+  function renderPlayerCurrency() {
+    c.fillStyle = 'black';
+    c.font = '20px Arial';
+    c.fillText(`Currency: ${playerCurrency}`, canvas.width - 150, 30);
   }

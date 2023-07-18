@@ -20,6 +20,7 @@ class Building {
     draw() {
         c.fillStyle = 'green';
         c.fillRect(this.drawLocation.x, this.drawLocation.y, this.size, this.size);
+        
 
         // Draw the building's range. Use setStroke in future.
         // c.beginPath();
