@@ -263,3 +263,11 @@ function renderPlayerHealthBar() {
     c.font = '20px Arial';
     c.fillText(`Currency: ${playerCurrency}`, canvas.width - 150, 30);
   }
+
+  // Spend currency when tower is placed.
+  function spendTowerCost() {
+    playerCurrency -= 50;
+  }
+
+
+  

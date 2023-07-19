@@ -20,54 +20,14 @@ var mouseGridY = 0;
 const image = new Image();
 image.src = 'img/soloLane.png';
 
-const player_health_max = 100;
-var player_health = 100;
+const player_health_max = 500;
+var player_health = 500;
 var gameOverCheck = false;
 let playerCurrency = 500;
 
 
 
-// ============== Enemy Spawning ============== //
 
-// Enemy spawning variables.
-const enemies = [];
-let wave = 1;
-let spawnIndex = 0;
-let spawnInterval = null;
-
-// Enemy spawning functions.
-function spawnEnemy() {
-
-    if (spawnIndex < wave * 2) {
-        const newEnemy = new Enemy({
-            location: { x: enemySpawnNode.x, y: enemySpawnNode.y }
-        });
-        const enemyPath = [...validCheckpointPath];
-        newEnemy.health += wave * 50; // Temporary difficulty mechanic
-        newEnemy.setPath(enemyPath);
-        enemies.push(newEnemy);
-        spawnIndex++;
-    } else {
-        clearInterval(spawnInterval); // Stop spawning enemies at the end of the wave
-    }
-  }
-  
-function startWave() {
-    spawnIndex = 0;
-    spawnInterval = setInterval(spawnEnemy, SPAWN_INTERVAL_MS);
-
-    // After spawning all enemies in the wave, start the next wave after a delay
-    setTimeout(() => {
-
-        if(gameOverCheck) return;
-
-        clearInterval(spawnInterval);
-        wave++;
-        startWave();
-        console.log(`Wave ${wave} started!`);
-        displayWaveNumber(wave);
-    }, SPAWN_INTERVAL_MS * wave + WAVE_INTERVAL_MS);
-}
 
 
 
@@ -112,15 +72,18 @@ function animate() {
             // Projectile collisions with enemies.
             if (distance < projectile.enemy.radius + projectile.radius) {
                 
-                // Enemy health and projectile damage.
-                projectile.enemy.health -= 20;
-                if (projectile.enemy.health <= 0) {
+
+                if(projectile.enemy.alive == true) {
+                    enemyAttacked(projectile.enemy);
+                } else {
+
                     const enemyIndex = enemies.findIndex((enemy) => {
                         return enemy === projectile.enemy;
                     });
 
-                    playerCurrency += 10;  // Gain 10 currency for killing enemies.
+                    console.log(enemyIndex);
 
+                    // Remove enemy from enemies array.
                     if (enemyIndex > -1) enemies.splice(enemyIndex, 1);
                 }
 
@@ -157,8 +120,8 @@ canvas.addEventListener('click', (event) => {
     // If a tower is spawned, update path for each enemy using their current position.
     updateEnemyPath();
 
-    // If a tower is spawned, reduce player currency by 50.
-    playerCurrency -= 50;
+    // Reduce player currency by the cost of the tower placed.
+    spendTowerCost();
 
 });
 

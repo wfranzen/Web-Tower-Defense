@@ -18,6 +18,8 @@ class Enemy {
         this.remainingWaypoints = null;
         this.nextWaypoint = null;
         this.currentGoal = enemyCheckpointNode;
+        this.currencyValue = 10;
+        this.alive = true;
     }
 
     // Draws the enemy.
@@ -85,4 +87,69 @@ class Enemy {
         this.remainingWaypoints.shift();
         this.nextWaypoint = this.remainingWaypoints[0];
     }
+}
+
+
+// ============== Enemy Spawning ============== //
+
+// Enemy spawning variables.
+const enemies = [];
+let wave = 1;
+let spawnIndex = 0;
+let spawnInterval = null;
+
+// Enemy spawning functions.
+function spawnEnemy() {
+
+    if (spawnIndex < wave * 2) {
+        const newEnemy = new Enemy({
+            location: { x: enemySpawnNode.x, y: enemySpawnNode.y }
+        });
+        const enemyPath = [...validCheckpointPath];
+        newEnemy.health += wave * 50; // Temporary difficulty mechanic
+        newEnemy.setPath(enemyPath);
+        enemies.push(newEnemy);
+        spawnIndex++;
+    } else {
+        clearInterval(spawnInterval); // Stop spawning enemies at the end of the wave
+    }
+  }
+  
+function startWave() {
+    spawnIndex = 0;
+    spawnInterval = setInterval(spawnEnemy, SPAWN_INTERVAL_MS);
+
+    // After spawning all enemies in the wave, start the next wave after a delay
+    setTimeout(() => {
+
+        if(gameOverCheck) return;
+
+        clearInterval(spawnInterval);
+        wave++;
+        startWave();
+        console.log(`Wave ${wave} started!`);
+        displayWaveNumber(wave);
+    }, SPAWN_INTERVAL_MS * wave + WAVE_INTERVAL_MS);
+}
+
+
+// ============== Enemy Health ============== //
+
+// Create a function that receives an enemy and reduce its health by 20.
+function enemyAttacked(enemy) {
+
+    if(!enemy.alive) return;
+
+    if(enemy.health > 0) {
+        enemy.health -= 20;  // Temporary damage mechanic. Needs to be changed to account for different towers.
+    } else {
+        enemyKilled(enemy);
+    }
+}
+
+// Enemy no longer alive and add currency value to player's total.
+function enemyKilled(enemy) {
+
+    enemy.alive = false;
+    playerCurrency += enemy.currencyValue;
 }
