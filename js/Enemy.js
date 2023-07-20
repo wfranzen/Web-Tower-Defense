@@ -20,6 +20,8 @@ class Enemy {
         this.currentGoal = enemyCheckpointNode;
         this.currencyValue = 10;
         this.isAlive = true;
+        this.type = 'Basic';
+        this.speed = 1;
     }
 
     // Draws the enemy.
@@ -57,9 +59,8 @@ class Enemy {
         const angle = Math.atan2(yDistance, xDistance);
 
         // Update the enemy's movement speed.
-        const speed = 1;
-        this.velocity.x = Math.cos(angle) * speed;
-        this.velocity.y = Math.sin(angle) * speed;
+        this.velocity.x = Math.cos(angle) * this.speed;
+        this.velocity.y = Math.sin(angle) * this.speed;
         this.position.x += this.velocity.x;
         this.position.y += this.velocity.y;
 
@@ -70,7 +71,7 @@ class Enemy {
             this.remainingWaypoints.shift();
             this.nextWaypoint = this.remainingWaypoints[0];
             
-            if(this.position.x == 328 && this.position.y == 328) {
+            if(this.currentGoal == enemyCheckpointNode && this.remainingWaypoints[0] == null) {
                 this.currentGoal = enemyGoalNode;
                 updateEnemyPath();
                 
@@ -95,7 +96,8 @@ class Enemy {
 class FastEnemy extends Enemy {
     constructor(options) {
         super(options);
-        this.speed = 3;
+        this.type = 'Fast';
+        this.speed = 2;
         this.currencyValue = 15;
     }
 }
@@ -104,11 +106,19 @@ class FastEnemy extends Enemy {
 class TankEnemy extends Enemy {
     constructor(options) {
         super(options);
-        this.health = 500;
+        this.type = 'Tank';
+        this.health = 400;
         this.currencyValue = 20;
-        this.speed = 0.35;
+        this.speed = 0.5;
     }
 }
+
+let enemyTypes = {
+    Enemy: Enemy,
+    FastEnemy: FastEnemy,
+    TankEnemy: TankEnemy,
+}
+
 
 // ============== Enemy Spawning ============== //
 
@@ -117,12 +127,6 @@ const enemies = [];
 let wave = 1;
 let spawnIndex = 0;
 let spawnInterval = null;
-
-let enemyTypes = {
-    Enemy: Enemy,
-    FastEnemy: FastEnemy,
-    TankEnemy: TankEnemy,
-}
 
 // Enemy spawning functions.
 function spawnEnemy() {
@@ -134,6 +138,7 @@ function spawnEnemy() {
         const enemyPath = [...validCheckpointPath];
         // newEnemy.health += wave * 50; // Temporary difficulty mechanic
         newEnemy.setPath(enemyPath);
+        console.log(newEnemy.type + ' enemy spawned!');
         enemies.push(newEnemy);
         spawnIndex++;
     } else {

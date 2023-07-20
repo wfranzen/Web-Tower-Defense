@@ -1,5 +1,4 @@
 // Pre-determined waves of enemies.
-
 let waves = [
     ["Enemy", "Enemy", "Enemy"], // Wave 1
     ["Enemy", "Enemy", "Enemy", "Enemy", "Enemy"], // Wave 2

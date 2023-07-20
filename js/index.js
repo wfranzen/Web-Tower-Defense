@@ -81,8 +81,6 @@ function animate() {
                         return enemy === projectile.enemy;
                     });
 
-                    console.log(enemyIndex);
-
                     // Remove enemy from enemies array.
                     if (enemyIndex > -1) enemies.splice(enemyIndex, 1);
                 }
