@@ -95,8 +95,8 @@ class Enemy {
 class FastEnemy extends Enemy {
     constructor(options) {
         super(options);
-        this.speed = 2;
-        this.currencyValue = 25;
+        this.speed = 3;
+        this.currencyValue = 15;
     }
 }
 
@@ -104,9 +104,9 @@ class FastEnemy extends Enemy {
 class TankEnemy extends Enemy {
     constructor(options) {
         super(options);
-        this.health = 300;
-        this.currencyValue = 50;
-        this.speed = 0.5;
+        this.health = 500;
+        this.currencyValue = 20;
+        this.speed = 0.35;
     }
 }
 
@@ -119,20 +119,20 @@ let spawnIndex = 0;
 let spawnInterval = null;
 
 let enemyTypes = {
-    basic: Enemy,
-    fast: FastEnemy,
-    tank: TankEnemy,
+    Enemy: Enemy,
+    FastEnemy: FastEnemy,
+    TankEnemy: TankEnemy,
 }
 
 // Enemy spawning functions.
 function spawnEnemy() {
 
-    if (spawnIndex < wave * 2) {
-        const newEnemy = new FastEnemy({
-            location: { x: enemySpawnNode.x, y: enemySpawnNode.y }
-        });
+    if (spawnIndex < waves[wave].length) {
+        const enemyType = waves[wave][spawnIndex];  // Grab enemy in the current wave from the pre-determined waves array.
+        const EnemyClass = enemyTypes[enemyType];  // Grab the relevant enemy class from the enemyTypes object.
+        const newEnemy = new EnemyClass({ location: enemySpawnNode });  // Create a new enemy object.
         const enemyPath = [...validCheckpointPath];
-        newEnemy.health += wave * 50; // Temporary difficulty mechanic
+        // newEnemy.health += wave * 50; // Temporary difficulty mechanic
         newEnemy.setPath(enemyPath);
         enemies.push(newEnemy);
         spawnIndex++;
@@ -155,7 +155,7 @@ function startWave() {
         startWave();
         console.log(`Wave ${wave} started!`);
         displayWaveNumber(wave);
-    }, SPAWN_INTERVAL_MS * wave + WAVE_INTERVAL_MS);
+    }, SPAWN_INTERVAL_MS * waves[wave].length + WAVE_INTERVAL_MS);
 }
 
 
