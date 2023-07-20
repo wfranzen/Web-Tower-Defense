@@ -73,7 +73,7 @@ function animate() {
             if (distance < projectile.enemy.radius + projectile.radius) {
                 
 
-                if(projectile.enemy.alive == true) {
+                if(projectile.enemy.isAlive == true) {
                     enemyAttacked(projectile.enemy);
                 } else {
 

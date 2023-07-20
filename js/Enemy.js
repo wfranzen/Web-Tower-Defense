@@ -19,7 +19,7 @@ class Enemy {
         this.nextWaypoint = null;
         this.currentGoal = enemyCheckpointNode;
         this.currencyValue = 10;
-        this.alive = true;
+        this.isAlive = true;
     }
 
     // Draws the enemy.
@@ -89,6 +89,26 @@ class Enemy {
     }
 }
 
+// ============== Enemy Types ============== //
+
+// Fast enemy type.
+class FastEnemy extends Enemy {
+    constructor(options) {
+        super(options);
+        this.speed = 2;
+        this.currencyValue = 25;
+    }
+}
+
+// Tank enemy type.
+class TankEnemy extends Enemy {
+    constructor(options) {
+        super(options);
+        this.health = 300;
+        this.currencyValue = 50;
+        this.speed = 0.5;
+    }
+}
 
 // ============== Enemy Spawning ============== //
 
@@ -98,11 +118,17 @@ let wave = 1;
 let spawnIndex = 0;
 let spawnInterval = null;
 
+let enemyTypes = {
+    basic: Enemy,
+    fast: FastEnemy,
+    tank: TankEnemy,
+}
+
 // Enemy spawning functions.
 function spawnEnemy() {
 
     if (spawnIndex < wave * 2) {
-        const newEnemy = new Enemy({
+        const newEnemy = new FastEnemy({
             location: { x: enemySpawnNode.x, y: enemySpawnNode.y }
         });
         const enemyPath = [...validCheckpointPath];
@@ -113,7 +139,7 @@ function spawnEnemy() {
     } else {
         clearInterval(spawnInterval); // Stop spawning enemies at the end of the wave
     }
-  }
+}
   
 function startWave() {
     spawnIndex = 0;
@@ -138,7 +164,7 @@ function startWave() {
 // Create a function that receives an enemy and reduce its health by 20.
 function enemyAttacked(enemy) {
 
-    if(!enemy.alive) return;
+    if(!enemy.isAlive) return;
 
     if(enemy.health > 0) {
         enemy.health -= 20;  // Temporary damage mechanic. Needs to be changed to account for different towers.
@@ -147,9 +173,11 @@ function enemyAttacked(enemy) {
     }
 }
 
-// Enemy no longer alive and add currency value to player's total.
+// Enemy no longer isAlive and add currency value to player's total.
 function enemyKilled(enemy) {
 
-    enemy.alive = false;
+    enemy.isAlive = false;
     playerCurrency += enemy.currencyValue;
 }
+
+
