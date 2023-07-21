@@ -1,7 +1,7 @@
-// Object class to represent the enemy.
+// Object class to represent an enemy.
 class Enemy {
 
-    // Constructor for the enemy object.
+    // Constructor for the basic enemy object.
     constructor({ location = {x: 0, y: 0} }) {
     
         this.location = location;
@@ -16,17 +16,18 @@ class Enemy {
             y: 0
         }
         this.remainingWaypoints = null;
-        this.nextWaypoint = null;
+        this.nextWaypoint = null;``
         this.currentGoal = enemyCheckpointNode;
-        this.currencyValue = 10;
+        this.currencyValue = 5;
         this.isAlive = true;
         this.type = 'Basic';
         this.speed = 1;
+        this.enemyColor = 'red';
     }
 
     // Draws the enemy.
     draw() {
-        c.fillStyle = 'red';
+        c.fillStyle = this.enemyColor;
         // c.fillRect(this.position.x, this.position.y, this.width, this.height);
         c.beginPath();
         c.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2);
@@ -71,13 +72,14 @@ class Enemy {
             this.remainingWaypoints.shift();
             this.nextWaypoint = this.remainingWaypoints[0];
             
-            if(this.currentGoal == enemyCheckpointNode && this.remainingWaypoints[0] == null) {
+            if(this.currentGoal == enemyCheckpointNode && this.remainingWaypoints[0] == null) {  // If checkpoint position reached by enemy
                 this.currentGoal = enemyGoalNode;
                 updateEnemyPath();
                 
             } else if(!this.nextWaypoint) {
                 console.log('End of path reached.');
                 player_health -= 50;
+                this.isAlive = false;
             }
         }
     }
@@ -97,8 +99,10 @@ class FastEnemy extends Enemy {
     constructor(options) {
         super(options);
         this.type = 'Fast';
-        this.speed = 2;
-        this.currencyValue = 15;
+        this.speed = 1.5;
+        this.health = 50;
+        this.currencyValue = 10;
+        this.enemyColor = 'yellow';
     }
 }
 
@@ -107,17 +111,33 @@ class TankEnemy extends Enemy {
     constructor(options) {
         super(options);
         this.type = 'Tank';
-        this.health = 400;
+        this.health = 500;
         this.currencyValue = 20;
-        this.speed = 0.5;
+        this.speed = 0.75;
+        this.enemyColor = 'green';
     }
 }
 
+// Boss enemy type.
+class BossEnemy extends Enemy {
+    constructor(options) {
+        super(options);
+        this.type = 'Boss';
+        this.health = 2500;
+        this.currencyValue = 100;
+        this.speed = 0.5;
+        this.enemyColor = 'purple';
+    }
+}
+
+// Enemy types object.
 let enemyTypes = {
     Enemy: Enemy,
     FastEnemy: FastEnemy,
     TankEnemy: TankEnemy,
+    BossEnemy: BossEnemy
 }
+
 
 
 // ============== Enemy Spawning ============== //
@@ -127,6 +147,8 @@ const enemies = [];
 let wave = 1;
 let spawnIndex = 0;
 let spawnInterval = null;
+let timeBetweenSpawn = 1000; // Interval between enemy spawns in milliseconds
+let timeBetweenWave = 10000; // Interval between waves in milliseconds
 
 // Enemy spawning functions.
 function spawnEnemy() {
@@ -136,7 +158,7 @@ function spawnEnemy() {
         const EnemyClass = enemyTypes[enemyType];  // Grab the relevant enemy class from the enemyTypes object.
         const newEnemy = new EnemyClass({ location: enemySpawnNode });  // Create a new enemy object.
         const enemyPath = [...validCheckpointPath];
-        // newEnemy.health += wave * 50; // Temporary difficulty mechanic
+        newEnemy.health += wave * 10; // Temporary difficulty mechanic
         newEnemy.setPath(enemyPath);
         console.log(newEnemy.type + ' enemy spawned!');
         enemies.push(newEnemy);
@@ -148,19 +170,27 @@ function spawnEnemy() {
   
 function startWave() {
     spawnIndex = 0;
-    spawnInterval = setInterval(spawnEnemy, SPAWN_INTERVAL_MS);
+    spawnInterval = setInterval(spawnEnemy, timeBetweenSpawn);
 
     // After spawning all enemies in the wave, start the next wave after a delay
     setTimeout(() => {
 
         if(gameOverCheck) return;
+        reduceSpawnInterval();
+        displayWaveNumber(wave);
 
         clearInterval(spawnInterval);
         wave++;
         startWave();
         console.log(`Wave ${wave} started!`);
-        displayWaveNumber(wave);
-    }, SPAWN_INTERVAL_MS * waves[wave].length + WAVE_INTERVAL_MS);
+    }, timeBetweenSpawn * waves[wave].length + timeBetweenWave);
+}
+
+function reduceSpawnInterval() {
+
+    if(timeBetweenSpawn > 250) {
+        timeBetweenSpawn -= 50;
+    }
 }
 
 
