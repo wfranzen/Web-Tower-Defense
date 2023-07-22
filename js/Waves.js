@@ -1,6 +1,5 @@
 // Pre-determined waves of enemies.
 let waves = [[], // Wave 0 Does Not Exist.
-    
     ["Enemy", "Enemy", "Enemy"], // Wave 1
     ["Enemy", "Enemy", "Enemy", "Enemy", "Enemy"], // Wave 2
     ["Enemy", "Enemy", "Enemy", "Enemy", "Enemy"], // Wave 3
@@ -19,4 +18,11 @@ let waves = [[], // Wave 0 Does Not Exist.
     ["FastEnemy", "Enemy", "Enemy", "FastEnemy", "FastEnemy", "Enemy", "Enemy", "FastEnemy", "FastEnemy", "Enemy", "Enemy", "FastEnemy"], // Wave 14
     ["TankEnemy", "FastEnemy", "FastEnemy", "TankEnemy", "FastEnemy", "FastEnemy", "TankEnemy", "FastEnemy", "FastEnemy"], // Wave 15
     ["TankEnemy", "TankEnemy", "TankEnemy", "Enemy", "Enemy", "Enemy", "Enemy", "Enemy", "Enemy", "Enemy", "Enemy", "Enemy", "Enemy"], // Wave 16
+    // Come up with additional waves that increase in the number of enemies, have more fast enemies, and have more tank enemies.
+    ["TankEnemy", "FastEnemy", "FastEnemy", "Enemy", "Enemy", "Enemy", "TankEnemy", "FastEnemy", "FastEnemy", "Enemy", "Enemy", "Enemy"], // Wave 17
+    ["Enemy", "Enemy", "Enemy", "Enemy", "Enemy", "Enemy", "Enemy", "Enemy", "Enemy", "Enemy", "Enemy", "Enemy", "Enemy", "Enemy", "Enemy", "Enemy", "Enemy", "Enemy", "Enemy", "Enemy", "Enemy", "Enemy", "Enemy", "Enemy", "Enemy", "Enemy"], // Wave 18
+    ["FastEnemy", "FastEnemy", "FastEnemy", "FastEnemy", "FastEnemy", "TankEnemy", "FastEnemy", "FastEnemy", "FastEnemy", "FastEnemy", "FastEnemy", "TankEnemy"], // Wave 19
+    ["BossEnemy", "BossEnemy", "BossEnemy"], // Wave 20
+
+
 ]
