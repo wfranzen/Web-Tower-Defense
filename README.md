@@ -1,4 +1,4 @@
-**Web Tower Defense (TBD Name)**
+**Web Tower Defense**
 
 
 **_Description_**
@@ -16,5 +16,7 @@ A basic web-based tower defense game developed in JavaScript. Build complex maze
 
 • Additional maps for varying gameplay.
 
+• Custom sprites for all game objects.
 
-The core mechanics are influenced by tower-defense games Wintermaul and Xeno Tactic.
+
+The core mechanics of this game are inspired by tower-defense games Wintermaul and Xeno Tactic.
