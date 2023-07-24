@@ -55,7 +55,7 @@ function animate() {
             const xDiff = enemy.position.x - building.drawCenter.x;
             const yDiff = enemy.position.y - building.drawCenter.y;
             const distance = Math.hypot(xDiff, yDiff);
-            return distance < building.range + enemy.radius;
+            return distance < building.attackRange + enemy.radius;
         });
         building.target = validEnemies[0];
 
