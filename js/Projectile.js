@@ -9,6 +9,7 @@ class Projectile {
         this.radius = 4;
         this.enemy = enemy;
         this.projSpeed = 2;
+        this.damage = 20;
     }
 
     draw() {

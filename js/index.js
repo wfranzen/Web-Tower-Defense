@@ -65,6 +65,7 @@ function animate() {
         // If there are valid enemies, set the building's target to the first valid enemy.
         for(let i = building.projectiles.length - 1; i >= 0; i--) {
             const projectile = building.projectiles[i];
+            projectile.damage = building.attackDamage;
 
             projectile.update();
 
@@ -77,7 +78,7 @@ function animate() {
                 
 
                 if(projectile.enemy.isAlive == true) {
-                    enemyAttacked(projectile.enemy);
+                    enemyAttacked(projectile.enemy, projectile.damage);
                 } else {
 
                     const enemyIndex = enemies.findIndex((enemy) => {
