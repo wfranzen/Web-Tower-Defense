@@ -30,10 +30,6 @@ let playerCurrency = 500;
 
 
 
-
-
-
-
 // ============== Building Placement & Game Animation ============== //
 
 // Function to animate the canvas.
@@ -111,10 +107,8 @@ function animate() {
 
 
 
+
 // ============== Mouse Functionality ============== //
-
-
-
 
 // Get the mouse position.
 var canPlaceTowerAtMouse = false;
@@ -136,8 +130,6 @@ window.addEventListener('mousemove', (event) => {
     
 });
 
-// Display tower placement menu on valid click.
-
 // Enemy path updating after building placement.
 function updateEnemyPath() {
 
@@ -156,26 +148,6 @@ function updateEnemyPath() {
 
 }
 
-// ============== Game Initialization ============== //
-const validTilesMatrix = arrayToMatrix(placementTilesData, 41);
-
-const nodeMatrix = buildNodeMatrix(validTilesMatrix);
-linkNeighbors(nodeMatrix);
-
-const enemySpawnNode = nodeMatrix[20][0];  // Enemy spawn
-const enemyCheckpointNode = nodeMatrix[20][20];  // Enemy checkpoint
-const enemyGoalNode = nodeMatrix[20][40];  // Enemy goal
-
-var validCheckpointPath = astar(enemySpawnNode, enemyCheckpointNode);
-var validGoalPath = astar(enemyCheckpointNode, enemyGoalNode);
-
-const buildings = [];
-
-startWave();
-
-setInterval(function(){
-    animate();
-}, 1000/120);
 
 // ============== Tower Placement Menu ============== //
 
@@ -219,6 +191,8 @@ for (let towerType in towerTypes) {
     towerPlacementMenu.appendChild(towerOption);
 }
 
+
+
 // ============== Build Tower ============== //
 
 function buildTower(towerType) {
@@ -231,3 +205,28 @@ function buildTower(towerType) {
     // If a tower is spawned, update path for each enemy using their current position.
     updateEnemyPath();
 }
+
+
+
+// ============== Game Initialization ============== //
+const validTilesMatrix = arrayToMatrix(placementTilesData, 41);
+
+const nodeMatrix = buildNodeMatrix(validTilesMatrix);
+linkNeighbors(nodeMatrix);
+
+const enemySpawnNode = nodeMatrix[20][0];  // Enemy spawn
+const enemyCheckpointNode = nodeMatrix[20][20];  // Enemy checkpoint
+const enemyGoalNode = nodeMatrix[20][40];  // Enemy goal
+
+var validCheckpointPath = astar(enemySpawnNode, enemyCheckpointNode);
+var validGoalPath = astar(enemyCheckpointNode, enemyGoalNode);
+
+const buildings = [];
+
+setTimeout(() => {
+    startWave();
+}, FIRST_WAVE_DELAY_MS)
+
+setInterval(function(){
+    animate();
+}, 1000/120);

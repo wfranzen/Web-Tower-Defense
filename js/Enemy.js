@@ -194,6 +194,7 @@ function reduceSpawnInterval() {
 }
 
 
+
 // ============== Enemy Health ============== //
 
 // Create a function that receives an enemy and reduce its health by 20.

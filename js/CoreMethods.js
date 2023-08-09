@@ -105,32 +105,6 @@ function isValidTowerPlacement(xx, yy) {
     return true;
 }
 
-// // Check to see if the placement of a building does not make the path impossible.
-// function isValidGoalTowerPlacement(xx, yy) {
-
-//     // Prevent building tower on walls and spawn.
-//     if(nodeMatrix[xx][yy].wall === true) {return false;}
-//     if(nodeMatrix[xx][yy].spawn === true) {return false;}
-
-//     // Prevent building tower on path - checks if placement of wall at (xx,yy) allows for possible path
-//     nodeMatrix[xx][yy].wall = true;
-//     validCheckpointPath = astar(enemySpawnNode, enemyCheckpointNode);
-//     // validGoalPath = astar(enemyCheckpointNode, enemyGoalNode);
-//     isValidPath = validCheckpointPath.length > 0;
-//     nodeMatrix[xx][yy].wall = false;
-
-
-//     if(!isValidPath) {
-//         validCheckpointPath = astar(enemySpawnNode, enemyCheckpointNode);
-//         // validGoalPath = astar(enemyCheckpointNode, enemySpawnNode);
-//         return false;
-//     }
-
-//     // Allow placement of tower.
-//     return true;
-// }
-
-
 function spawnTower(towerType, selectedTile) {
     // Check if the active tile is a building placement tile.
     if (!isValidTowerPlacement(selectedTile.x, selectedTile.y)) {
