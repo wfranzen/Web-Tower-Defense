@@ -74,7 +74,7 @@ class SniperTower extends Building {
         super(stats);
         this.attackRange = 96;
         this.projectileSpeed = 3;
-        this.attackDamage = 30;
+        this.attackDamage = 50;
         this.buildingColor = 'purple';
         this.attackSpeed = 150;
         this.towerCost = 70;
@@ -83,7 +83,15 @@ class SniperTower extends Building {
 
 // Enemy types object.
 let towerTypes = {
-    Building: Building,
-    SniperTower: SniperTower,
-    QuickTower: QuickTower
+    SniperTower: {
+        class: SniperTower,
+        name: 'Sniper Tower',
+        description: 'A slow firing tower with longer range and higher damage.'
+    },
+    QuickTower: {
+        class: QuickTower,
+        name: 'Quick Tower',
+        description: 'A quick firing tower with shorter range and lower damage.'
+    }
 }
+

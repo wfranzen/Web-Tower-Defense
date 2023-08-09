@@ -2,6 +2,9 @@ const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
 OverrideCanvas(canvas.constructor, c.constructor);
 
+const towerPlacementMenu = document.getElementById('tower-placement-menu');
+let selectedTile = { x: null, y: null };
+
 // Canvas Width: 41 tiles * TILESIZE (16) px. Canvas Height: 21 tiles * TILESIZE (16) px.
 canvas.width = 41 * TILESIZE;
 canvas.height = 41 * TILESIZE;
@@ -109,19 +112,8 @@ function animate() {
 
 // ============== Mouse Functionality ============== //
 
-canvas.addEventListener('click', (event) => {
-    
-    if(!spawnTower(mouseGridX, mouseGridY)) {
-        return;
-    }
 
-    // If a tower is spawned, update path for each enemy using their current position.
-    updateEnemyPath();
 
-    // Reduce player currency by the cost of the tower placed.
-    spendTowerCost();
-
-});
 
 // Get the mouse position.
 var canPlaceTowerAtMouse = false;
@@ -142,6 +134,8 @@ window.addEventListener('mousemove', (event) => {
     canPlaceTowerAtMouse = isValidTowerPlacement(mouseGridX, mouseGridY);
     
 });
+
+// Display tower placement menu on valid click.
 
 // Enemy path updating after building placement.
 function updateEnemyPath() {
@@ -182,4 +176,57 @@ setInterval(function(){
     animate();
 }, 1000/120);
 
+// ============== Tower Placement Menu ============== //
 
+// Display tower placement menu on valid click.
+canvas.addEventListener('click', (event) => {
+    
+    const canvasRect = canvas.getBoundingClientRect();
+    if(canPlaceTowerAtMouse) {
+        towerPlacementMenu.style.left = (event.clientX) + 'px';
+        towerPlacementMenu.style.top = (event.clientY) + 'px'
+        towerPlacementMenu.classList.add('visible');
+        selectedTile = {x: mouseGridX, y: mouseGridY};  // Save the selected tile for tower placement - used in buildTower()
+    }
+
+});
+
+// Hide tower placement menu on click outside menu.
+window.addEventListener('click', (event) => {
+    
+
+    if(event.target !== towerPlacementMenu && towerPlacementMenu.contains(event.target)) {
+        towerPlacementMenu.classList.remove('visible');
+    }
+});
+
+for (let towerType in towerTypes) {
+
+    let towerData = towerTypes[towerType];
+    let towerInstance = new towerData.class({});
+    let towerOption = document.createElement('div');
+
+    towerOption.className = 'tower-type';
+    towerOption.textContent = towerData.name + " (" + towerInstance.towerCost + " gold)";
+    
+    towerOption.style.background = towerInstance.buildingColor;
+    
+    towerOption.addEventListener('click', () => {
+        buildTower(towerType);
+    });
+    
+    towerPlacementMenu.appendChild(towerOption);
+}
+
+// ============== Build Tower ============== //
+
+function buildTower(towerType) {
+
+    // Create a new tower instance.
+    if(!spawnTower(towerType, selectedTile)) {
+        return;
+    }
+
+    // If a tower is spawned, update path for each enemy using their current position.
+    updateEnemyPath();
+}
