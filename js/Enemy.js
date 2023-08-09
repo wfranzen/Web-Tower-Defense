@@ -197,12 +197,16 @@ function reduceSpawnInterval() {
 // ============== Enemy Health ============== //
 
 // Create a function that receives an enemy and reduce its health by 20.
-function enemyAttacked(enemy) {
+function enemyAttacked(enemy, damageReceived) {
 
     if(!enemy.isAlive) return;
 
     if(enemy.health > 0) {
-        enemy.health -= 20;  // Temporary damage mechanic. Needs to be changed to account for different towers.
+        enemy.health -= damageReceived;  // Temporary damage mechanic. Needs to be changed to account for different towers.
+        console.log(`Enemy health: ${enemy.health}. Damage Received: ${damageReceived}`);
+        if(enemy.health <= 0) {
+            enemyKilled(enemy);
+        }
     } else {
         enemyKilled(enemy);
     }

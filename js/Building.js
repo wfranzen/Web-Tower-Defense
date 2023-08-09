@@ -17,6 +17,8 @@ class Building {
         this.frames = 0;
         this.attackDamage = 20;
         this.buildingColor = 'green';
+        this.attackSpeed = 100;  // Number of frames between attacks. Lower = Faster.
+        this.towerCost = 50;
     }
 
     draw() {
@@ -33,7 +35,7 @@ class Building {
 
     update() {
         this.draw();
-        if (this.frames % 100 === 0 && this.target) {
+        if (this.frames % this.attackSpeed === 0 && this.target) {
             this.projectiles.push(
                 new Projectile({
                     position: {
@@ -51,31 +53,45 @@ class Building {
 
 // ============== Tower Types ============== //
 
-// A fast firing tower with shorter range and lower damage.
+// A quick firing tower with shorter range and lower damage.
+// Stats: COST(60) - AS(50) - DMG(15) - RANGE(48) - PROJSPD(3)
 class QuickTower extends Building {
-    constructor({ location = {x: 0, y: 0} }) {
-        super({ location });
+    constructor(stats) {
+        super(stats);
         this.attackRange = 48;
-        this.projectileSpeed = 3;
-        this.frames = 0;
+        this.projectileSpeed = 2;
         this.attackDamage = 15;
         this.buildingColor = 'orange';
-    }
-
-    update() {
-        this.draw();
-        if (this.frames % 50 === 0 && this.target) {
-            this.projectiles.push(
-                new Projectile({
-                    position: {
-                        x: this.drawCenter.x,
-                        y: this.drawCenter.y
-                    },
-                    enemy: this.target
-                })
-            );
-        }
-
-        this.frames++;
+        this.attackSpeed = 50;
+        this.towerCost = 50;
     }
 }
+
+// A slow firing tower with longer range and higher damage.
+// Stats: COST(75) - AS(300) - DMG(50) - RANGE(100) - PROJSPD(3)
+class SniperTower extends Building {
+    constructor(stats) {
+        super(stats);
+        this.attackRange = 96;
+        this.projectileSpeed = 3;
+        this.attackDamage = 50;
+        this.buildingColor = 'purple';
+        this.attackSpeed = 150;
+        this.towerCost = 70;
+    }
+}
+
+// Enemy types object.
+let towerTypes = {
+    SniperTower: {
+        class: SniperTower,
+        name: 'Sniper Tower',
+        description: 'A slow firing tower with longer range and higher damage.'
+    },
+    QuickTower: {
+        class: QuickTower,
+        name: 'Quick Tower',
+        description: 'A quick firing tower with shorter range and lower damage.'
+    }
+}
+

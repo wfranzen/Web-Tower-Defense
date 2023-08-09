@@ -4,7 +4,7 @@
  
  <style>
 
-body {
+    body {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -33,7 +33,7 @@ body {
       font-size: 48px;
       color: orangered;
       opacity: 0; /* Initially hidden */
-      transition: opacity 1.5s ease-in-out; /* Add a transition effect for fade-in and fade-out */
+      transition: opacity 1.5s ease-in-out;
       z-index: 1;
       pointer-events: none;
     }
@@ -43,16 +43,44 @@ body {
       font-size: 80px;
       color: orangered;
       opacity: 0; /* Initially hidden */
-      transition: opacity 1.5s ease-in-out; /* Add a transition effect for fade-in and fade-out */
+      transition: opacity 1.5s ease-in-out;
       z-index: 1;
       pointer-events: none;
     }
+
+    #tower-placement-menu {
+      position: absolute;
+      z-index: 100;
+      width: 64px;
+      background: #1b1a1a;
+      border-radius: 5px;
+      display: none;
+    }
+
+    #tower-placement-menu .tower-type {
+      padding: 4px 5px;
+      font-size: 8px;
+      color: #eee;
+      cursor: pointer;
+      border-radius: inherit;
+    }
+
+    #tower-placement-menu .tower-type:hover {
+      background: #343434;
+    }
+
+    #tower-placement-menu.visible {
+      display: block;
+    }
+
 </style>
 </head>
 <body>
     <canvas></canvas>
     <div id="waveNumberElement"></div>
     <div id="gameOverElement"></div>
+
+    <div id="tower-placement-menu"></div>
 
 
 <script src="js/Kanvas.js"></script>

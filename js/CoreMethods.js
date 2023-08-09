@@ -131,27 +131,33 @@ function isValidTowerPlacement(xx, yy) {
 // }
 
 
-function spawnTower(xx, yy) {
+function spawnTower(towerType, selectedTile) {
     // Check if the active tile is a building placement tile.
-    if (!isValidTowerPlacement(xx, yy)) {
+    if (!isValidTowerPlacement(selectedTile.x, selectedTile.y)) {
         return false;
     }
 
-    if (playerCurrency < 50) {
+    let towerInstance = new towerTypes[towerType].class({});
+    console.log("Tower Type:", towerType);
+    if (playerCurrency < towerInstance.towerCost) {
         return false;
+    } else {
+        playerCurrency -= towerInstance.towerCost;
     }
 
     buildings.push(
-        new Building({
+        new towerTypes[towerType].class({
             location: {
-                x: xx,
-                y: yy
+                x: selectedTile.x,
+                y: selectedTile.y
             }
         })
     );
     
-    nodeMatrix[xx][yy].wall = true;
-    // validPath = astar(enemySpawnNode, enemyGoalNode);  // Recalculated higher up
+    
+
+    // Prevents placing tower along path.
+    nodeMatrix[selectedTile.x][selectedTile.y].wall = true;
 
     // Place the tower on the grid.
     return true;
@@ -262,11 +268,6 @@ function renderPlayerHealthBar() {
     c.fillStyle = 'black';
     c.font = '20px Arial';
     c.fillText(`Currency: ${playerCurrency}`, canvas.width - 150, 30);
-  }
-
-  // Spend currency when tower is placed.
-  function spendTowerCost() {
-    playerCurrency -= 50;
   }
 
 
