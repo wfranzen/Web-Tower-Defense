@@ -228,6 +228,11 @@ function renderPlayerHealthBar() {
   
     // Calculate the current health bar width based on the player's health percentage
     const currentHealthWidth = (player_health / player_health_max) * healthBarWidth;
+    
+    // Hide the health bar when the player is at less than zero health
+    if (currentHealthWidth < 0) {
+        return;
+    }
   
     // Draw the background health bar
     c.fillStyle = 'gray';
@@ -238,11 +243,37 @@ function renderPlayerHealthBar() {
     c.fillRect(healthBarX, healthBarY, currentHealthWidth, healthBarHeight);
   }
 
-  function renderPlayerCurrency() {
+function renderPlayerCurrency() {
     c.fillStyle = 'black';
-    c.font = '20px Arial';
-    c.fillText(`Currency: ${playerCurrency}`, canvas.width - 150, 30);
-  }
+    c.font = 'bold 20px Arial';
+    c.fillText(`Currency: ${playerCurrency}`, canvas.width/2 + 50, 30);
+}
 
+function renderWaveTimer() {
+    c.fillStyle = 'black';
+    c.font = 'bold 20px Arial';
+    c.fillText(`Next Wave: ${waveTimer/1000}`, canvas.width/2 + 50, canvas.height - 15);
+}
+
+let updateInterval;
+function updateWaveTimer() {
+    if (updateInterval) {
+        clearInterval(updateInterval);
+    }
+
+    updateInterval = setInterval(() => {
+        waveTimer -= 100; // decrease by 1/10th of a second
+
+        // Convert milliseconds into a readable format
+        let seconds = Math.floor((waveTimer / 1000) % 60);
+        let minutes = Math.floor((waveTimer / (1000 * 60)) % 60);
+
+        nextWaveTime = minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+
+        if (waveTimer <= 0) {
+            clearInterval(updateInterval);
+        }
+    }, 100);
+}
 
   

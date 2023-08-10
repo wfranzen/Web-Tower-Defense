@@ -144,7 +144,7 @@ let enemyTypes = {
 
 // Enemy spawning variables.
 const enemies = [];
-let wave = 1;
+let wave = 0;
 let spawnIndex = 0;
 let spawnInterval = null;
 let timeBetweenSpawn = 1000; // Interval between enemy spawns in milliseconds
@@ -168,22 +168,37 @@ function spawnEnemy() {
     }
 }
   
+
+// Start the wave.
+let waveTimer = timeBetweenSpawn * waves[wave].length + timeBetweenWave;
 function startWave() {
     spawnIndex = 0;
     spawnInterval = setInterval(spawnEnemy, timeBetweenSpawn);
+    updateWaveTimer(waveTimer);
 
     // After spawning all enemies in the wave, start the next wave after a delay
     setTimeout(() => {
 
+        // If the game is over, stop spawning enemies.
         if(gameOverCheck) return;
-        reduceSpawnInterval();
-        displayWaveNumber(wave);
 
-        clearInterval(spawnInterval);
+        // Setup the next wave.
+        reduceSpawnInterval();
         wave++;
-        startWave();
+
+        // Display the wave number on the screen.
+        displayWaveNumber(wave);
         console.log(`Wave ${wave} started!`);
-    }, timeBetweenSpawn * waves[wave].length + timeBetweenWave);
+
+        // Display the wave timer on the screen.
+        waveTimer = timeBetweenSpawn * waves[wave].length + timeBetweenWave;
+        updateWaveTimer(waveTimer);
+
+        // Start the next wave.
+        clearInterval(spawnInterval);
+        startWave();
+        
+    }, waveTimer);
 }
 
 function reduceSpawnInterval() {
@@ -204,7 +219,6 @@ function enemyAttacked(enemy, damageReceived) {
 
     if(enemy.health > 0) {
         enemy.health -= damageReceived;  // Temporary damage mechanic. Needs to be changed to account for different towers.
-        console.log(`Enemy health: ${enemy.health}. Damage Received: ${damageReceived}`);
         if(enemy.health <= 0) {
             enemyKilled(enemy);
         }

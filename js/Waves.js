@@ -1,8 +1,10 @@
 // Pre-determined waves of enemies.
 let waves = [[], // Wave 0 Does Not Exist.
+
+    // Note that wave number here is 1 less than the actual wave variable.
     ["Enemy", "Enemy", "Enemy"], // Wave 1
     ["Enemy", "Enemy", "Enemy", "Enemy", "Enemy"], // Wave 2
-    ["Enemy", "Enemy", "Enemy", "Enemy", "Enemy"], // Wave 3
+    ["Enemy", "Enemy", "Enemy", "Enemy", "Enemy", "Enemy", "Enemy"], // Wave 3
     ["Enemy", "Enemy", "Enemy", "Enemy", "FastEnemy"], // Wave 3
     ["FastEnemy", "FastEnemy", "Enemy", "Enemy", "Enemy"], // Wave 2
     ["Enemy", "Enemy", "FastEnemy", "FastEnemy", "FastEnemy"], // Wave 4

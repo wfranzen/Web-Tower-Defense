@@ -39,6 +39,7 @@ function animate() {
     c.drawImage(image, 0, 0);
     renderPlayerHealthBar();
     renderPlayerCurrency();
+    renderWaveTimer();
     
     for(let i = enemies.length - 1; i >= 0; i--) {
         const enemy = enemies[i];
